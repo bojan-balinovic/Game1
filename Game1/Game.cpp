@@ -55,15 +55,20 @@ void Game::pollEvents()
 	}
 }
 
+void Game::updateMousePositions() {
+	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+}
+
 void Game::update()
 {
 	this->pollEvents();
+	this->updateMousePositions();
 }
 
 void Game::render()
 {
 
-	this->window->clear(sf::Color(255, 0, 0, 255));
+	this->window->clear();
 
 	// draw game objects
 	this->window->draw(this->enemy);

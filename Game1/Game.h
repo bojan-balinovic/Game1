@@ -8,7 +8,10 @@ private:
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event ev;
-	
+
+	//Mouse position
+	sf::Vector2i mousePosWindow;
+
 	// Game objects
 	sf::RectangleShape enemy;
 
@@ -29,6 +32,7 @@ public:
 
 	//functions
 	void pollEvents();
+	void updateMousePositions();
 	void update();
 	void render();
 
