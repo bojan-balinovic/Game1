@@ -9,6 +9,7 @@ void Game::initVariables()
 	this->enemySpawnTimerMax = 1000.f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 	this->maxEnemies = 5;
+	this->mouseHeld = false;
 
 }
 
@@ -32,21 +33,31 @@ void Game::updateEnemies()
 			this->enemySpawnTimer += 1.f;
 		}
 	}
+	bool deleted = false;
 	for (int i = 0;i < this->enemies.size();i++) {
-		bool deleted = false;
+
 		this->enemies[i].move(0.f, 5.f);
 		// Check if clicked upon
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
-				deleted = true;
-			}
-		}
+
 		if (this->enemies[i].getPosition().y > this->window->getSize().y) {
+			this->enemies.erase(this->enemies.begin() + i);
 			deleted = true;
 		}
-		if (deleted) {
-			this->enemies.erase(this->enemies.begin() + i);
+	}
+	std::cout << this->mouseHeld << std::endl;
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (this->mouseHeld == false) {
+			mouseHeld = true;
+			for (size_t i = 0;i < this->enemies.size() && deleted == false;i++) {
+				if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
+					deleted = true;
+					this->enemies.erase(this->enemies.begin() + i);
+				}
+			}
 		}
+	}
+	else {
+		mouseHeld = false;
 	}
 }
 

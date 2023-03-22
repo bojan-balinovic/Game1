@@ -2,6 +2,7 @@
 #include  "SFML/Graphics.hpp" // replace quotes with less than and greater than symbols
 #include <vector>
 #include <ctime>
+#include <iostream>
 
 class Game
 {
@@ -20,11 +21,11 @@ private:
 	sf::RectangleShape enemy;
 
 	// Game logic
-	int points;
+	unsigned points;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 	float maxEnemies;
-
+	bool mouseHeld;
 
 	// private functions
 	void initVariables();
