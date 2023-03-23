@@ -27,4 +27,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\Roboto-Regular.ttf" />
+  </ItemGroup>
 </Project>

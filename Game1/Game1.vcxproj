@@ -146,6 +146,9 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\Roboto-Regular.ttf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

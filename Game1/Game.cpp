@@ -1,10 +1,20 @@
 #include "Game.h"
 
+void Game::initFonts()
+{
+	if (!this->font.loadFromFile("Fonts/Roboto-Regular.ttf")) {
+		std::cout << "ERROR::GAME::INITFONTS::Failed to load font" << std::endl;
+	}
+
+}
+
 void Game::initVariables()
 {
 	this->window = nullptr;
 
 	// game logic
+	this->endGame = false;
+	this->health = 10;
 	this->points = 0;
 	this->enemySpawnTimerMax = 1000.f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
@@ -18,6 +28,16 @@ void Game::initWindow() {
 	this->videoMode.width = 800;
 	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Not Tetris");
 	this->window->setFramerateLimit(30);
+}
+
+void Game::initTexts()
+{
+	this->uiText.setFont(this->font);
+	this->uiText.setCharacterSize(24);
+	this->uiText.setFillColor(sf::Color::White);
+	this->uiText.setPosition(50, 50);
+	this->uiText.setString("NONE");
+
 }
 
 
@@ -42,9 +62,12 @@ void Game::updateEnemies()
 		if (this->enemies[i].getPosition().y > this->window->getSize().y) {
 			this->enemies.erase(this->enemies.begin() + i);
 			deleted = true;
+			this->health -= 1;
+			std::cout << "health: "<<this->health << std::endl;
+
 		}
 	}
-	std::cout << this->mouseHeld << std::endl;
+
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (this->mouseHeld == false) {
 			mouseHeld = true;
@@ -52,6 +75,8 @@ void Game::updateEnemies()
 				if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
 					deleted = true;
 					this->enemies.erase(this->enemies.begin() + i);
+					this->points += 1;
+					std::cout << "points: "<<this->points << std::endl;
 				}
 			}
 		}
@@ -66,6 +91,8 @@ Game::Game()
 	this->initVariables();
 	this->initWindow();
 	this->initEnemies();
+	this->initFonts();
+	this->initTexts();
 }
 
 Game::~Game()
@@ -85,6 +112,11 @@ void Game::initEnemies()
 const bool Game::running() const
 {
 	return this->window->isOpen();
+}
+
+const bool Game::getEndGame() const
+{
+	return this->endGame;
 }
 
 void Game::spawnEnemy()
@@ -124,8 +156,23 @@ void Game::updateMousePositions() {
 void Game::update()
 {
 	this->pollEvents();
-	this->updateMousePositions();
-	this->updateEnemies();
+	if (!this->endGame) {
+		this->updateMousePositions();
+		this->updateEnemies();
+	}
+	if (this->health <= 0) {
+		this->endGame = true;
+	}
+	this->updateText();
+}
+
+void Game::updateText()
+{
+	std::stringstream ss;
+
+	ss << "Points: " << this->points;
+
+	this->uiText.setString(ss.str());
 }
 
 void Game::renderEnemies()
@@ -135,6 +182,11 @@ void Game::renderEnemies()
 	}
 }
 
+void Game::renderText(sf::RenderTarget& target)
+{
+	target.draw(this->uiText);
+}
+
 void Game::render()
 {
 	this->window->clear();
@@ -142,6 +194,7 @@ void Game::render()
 	// draw game objects
 
 	this->renderEnemies();
+	this->renderText(*this->window);
 
 	this->window->display();
 }
