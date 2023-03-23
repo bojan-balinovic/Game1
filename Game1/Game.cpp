@@ -30,13 +30,22 @@ void Game::initWindow() {
 	this->window->setFramerateLimit(30);
 }
 
-void Game::initTexts()
+void Game::initUI()
 {
 	this->uiText.setFont(this->font);
 	this->uiText.setCharacterSize(24);
 	this->uiText.setFillColor(sf::Color::White);
 	this->uiText.setPosition(50, 50);
 	this->uiText.setString("NONE");
+	sf::Texture* texture=new sf::Texture;
+	if (!(*texture).loadFromFile("Sprites/heart.png")) {
+		//error loading sprite
+		std::cout << "ERROR: Loading sprite from file" << std::endl;
+	}
+	this->uiHeartSprite.setTexture(*texture);
+	this->uiHeartSprite.setPosition(50, 75);
+	this->uiHeartSprite.setScale(sf::Vector2f(0.1f, 0.1f));
+
 
 }
 
@@ -63,7 +72,7 @@ void Game::updateEnemies()
 			this->enemies.erase(this->enemies.begin() + i);
 			deleted = true;
 			this->health -= 1;
-			std::cout << "health: "<<this->health << std::endl;
+			std::cout << "health: " << this->health << std::endl;
 
 		}
 	}
@@ -76,7 +85,7 @@ void Game::updateEnemies()
 					deleted = true;
 					this->enemies.erase(this->enemies.begin() + i);
 					this->points += 1;
-					std::cout << "points: "<<this->points << std::endl;
+					std::cout << "points: " << this->points << std::endl;
 				}
 			}
 		}
@@ -92,7 +101,7 @@ Game::Game()
 	this->initWindow();
 	this->initEnemies();
 	this->initFonts();
-	this->initTexts();
+	this->initUI();
 }
 
 Game::~Game()
@@ -182,9 +191,10 @@ void Game::renderEnemies()
 	}
 }
 
-void Game::renderText(sf::RenderTarget& target)
+void Game::renderUI(sf::RenderTarget& target)
 {
 	target.draw(this->uiText);
+	target.draw(this->uiHeartSprite);
 }
 
 void Game::render()
@@ -194,7 +204,7 @@ void Game::render()
 	// draw game objects
 
 	this->renderEnemies();
-	this->renderText(*this->window);
+	this->renderUI(*this->window);
 
 	this->window->display();
 }

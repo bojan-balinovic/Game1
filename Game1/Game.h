@@ -20,8 +20,9 @@ private:
 	// Resources
 	sf::Font font;
 
-	// Text
+	// UI
 	sf::Text uiText;
+	sf::Sprite uiHeartSprite;
 
 	// Game objects
 	std::vector<sf::RectangleShape> enemies;
@@ -40,7 +41,7 @@ private:
 	void initFonts();
 	void initVariables();
 	void initWindow();
-	void initTexts();
+	void initUI();
 	void updateEnemies();
 
 public:
@@ -62,7 +63,7 @@ public:
 	void updateText();
 
 	void renderEnemies();
-	void renderText(sf::RenderTarget& target);
+	void renderUI(sf::RenderTarget& target);
 	void render();
 
 };
