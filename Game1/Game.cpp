@@ -96,6 +96,11 @@ void Game::updateEnemies()
 	}
 }
 
+sf::Color Game::generateRandomColor()
+{
+	return sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256);
+}
+
 Game::Game()
 {
 	this->initVariables();
@@ -135,7 +140,7 @@ void Game::spawnEnemy()
 		static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - this->enemy.getSize().x)),
 		0.f
 	);
-	this->enemy.setFillColor(sf::Color::Green);
+	this->enemy.setFillColor(this->generateRandomColor());
 
 	//spawn enemy
 	this->enemies.push_back(this->enemy);

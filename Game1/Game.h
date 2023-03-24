@@ -44,6 +44,7 @@ private:
 	void initWindow();
 	void initUI();
 	void updateEnemies();
+	sf::Color generateRandomColor();
 
 public:
 	//constructors / destructors
