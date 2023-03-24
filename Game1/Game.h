@@ -22,7 +22,8 @@ private:
 
 	// UI
 	sf::Text uiText;
-	sf::Sprite uiHeartSprite;
+	std::vector<sf::Sprite> uiHeartSprites;
+	sf::Texture* texture;
 
 	// Game objects
 	std::vector<sf::RectangleShape> enemies;
@@ -61,6 +62,7 @@ public:
 	void updateMousePositions();
 	void update();
 	void updateText();
+	void updateHearts();
 
 	void renderEnemies();
 	void renderUI(sf::RenderTarget& target);

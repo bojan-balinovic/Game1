@@ -20,6 +20,11 @@ void Game::initVariables()
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 	this->maxEnemies = 5;
 	this->mouseHeld = false;
+	this->texture = new sf::Texture;
+	if (!(*texture).loadFromFile("Sprites/heart.png")) {
+		//error loading sprite
+		std::cout << "ERROR: Loading sprite from file" << std::endl;
+	}
 
 }
 
@@ -37,16 +42,13 @@ void Game::initUI()
 	this->uiText.setFillColor(sf::Color::White);
 	this->uiText.setPosition(50, 50);
 	this->uiText.setString("NONE");
-	sf::Texture* texture=new sf::Texture;
-	if (!(*texture).loadFromFile("Sprites/heart.png")) {
-		//error loading sprite
-		std::cout << "ERROR: Loading sprite from file" << std::endl;
+	for (int i = 0;i < this->health;i++) {
+		sf::Sprite uiHeartSprite;
+		uiHeartSprite.setTexture(*this->texture);
+		uiHeartSprite.setPosition(50 + (i * 30), 75);
+		uiHeartSprite.setScale(sf::Vector2f(0.1f, 0.1f));
+		this->uiHeartSprites.push_back(uiHeartSprite);
 	}
-	this->uiHeartSprite.setTexture(*texture);
-	this->uiHeartSprite.setPosition(50, 75);
-	this->uiHeartSprite.setScale(sf::Vector2f(0.1f, 0.1f));
-
-
 }
 
 
@@ -72,8 +74,7 @@ void Game::updateEnemies()
 			this->enemies.erase(this->enemies.begin() + i);
 			deleted = true;
 			this->health -= 1;
-			std::cout << "health: " << this->health << std::endl;
-
+			this->uiHeartSprites.pop_back();
 		}
 	}
 
@@ -173,6 +174,7 @@ void Game::update()
 		this->endGame = true;
 	}
 	this->updateText();
+	this->updateHearts();
 }
 
 void Game::updateText()
@@ -182,6 +184,11 @@ void Game::updateText()
 	ss << "Points: " << this->points;
 
 	this->uiText.setString(ss.str());
+}
+
+void Game::updateHearts()
+{
+	
 }
 
 void Game::renderEnemies()
@@ -194,7 +201,9 @@ void Game::renderEnemies()
 void Game::renderUI(sf::RenderTarget& target)
 {
 	target.draw(this->uiText);
-	target.draw(this->uiHeartSprite);
+	for (auto& e : this->uiHeartSprites) {
+		target.draw(e);
+	};
 }
 
 void Game::render()
